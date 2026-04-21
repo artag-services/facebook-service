@@ -8,6 +8,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model FbMessage {
+  id          String          @id @default(uuid())
+  messageId   String          @unique
+  recipient   String
+  body        String
+  mediaUrl    String?
+  status      FbMessageStatus @default(PENDING)
+  fbMessageId String?
+  errorReason String?
+  sentAt      DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+enum FbMessageStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
 // ─── Pre-existing tables (never drop) ────────────────────────────────────────
 
 model days_off {
